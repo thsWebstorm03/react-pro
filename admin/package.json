@@ -5,6 +5,7 @@
   "dependencies": {
     "connected-react-router": "^4.4.1",
     "email-validator": "^2.0.4",
+    "firebase": "^5.4.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
     "react": "^16.4.2",
