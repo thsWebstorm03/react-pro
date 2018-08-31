@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Route, NavLink } from 'react-router-dom'
+import ProtectedRoute from './components/common/protected-route'
 import AuthRoute from './routes/auth'
 import AdminRoute from './routes/admin'
 
@@ -25,7 +26,7 @@ class App extends Component {
       <div>
         <h1>Hello World</h1>
         {this.menu}
-        <Route path="/admin" component={AdminRoute} />
+        <ProtectedRoute path="/admin" component={AdminRoute} />
         <Route path="/auth" component={AuthRoute} />
       </div>
     )

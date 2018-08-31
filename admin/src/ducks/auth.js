@@ -1,5 +1,6 @@
 import { appName } from '../config'
 import { Record } from 'immutable'
+import { createSelector } from 'reselect'
 import firebase from 'firebase/app'
 
 /**
@@ -34,6 +35,12 @@ export default function reducer(state = new ReducerRecord(), action) {
 /**
  * Selectors
  * */
+
+export const userSelector = (state) => state[moduleName].user
+export const isAuthorizedSelector = createSelector(
+  userSelector,
+  (user) => !!user
+)
 
 /**
  * Action Creators
