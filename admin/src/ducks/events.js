@@ -1,6 +1,6 @@
 import { all, takeEvery, put, select, call } from 'redux-saga/effects'
 import { appName } from '../config'
-import { Record, List } from 'immutable'
+import { Record, OrderedMap, OrderedSet } from 'immutable'
 import firebase from 'firebase/app'
 import { createSelector } from 'reselect'
 import { fbToEntities } from './utils'
@@ -15,13 +15,16 @@ export const FETCH_ALL_REQUEST = `${prefix}/FETCH_ALL_REQUEST`
 export const FETCH_ALL_START = `${prefix}/FETCH_ALL_START`
 export const FETCH_ALL_SUCCESS = `${prefix}/FETCH_ALL_SUCCESS`
 
+export const TOGGLE_SELECT = `${prefix}/TOGGLE_SELECT`
+
 /**
  * Reducer
  * */
 export const ReducerRecord = Record({
   loading: false,
   loaded: false,
-  entities: new List([])
+  selected: new OrderedSet([]),
+  entities: new OrderedMap()
 })
 
 export const EventRecord = Record({
@@ -47,6 +50,15 @@ export default function reducer(state = new ReducerRecord(), action) {
         .set('loaded', true)
         .set('entities', fbToEntities(payload, EventRecord))
 
+    case TOGGLE_SELECT:
+      return state.update(
+        'selected',
+        (selected) =>
+          selected.has(payload.id)
+            ? selected.remove(payload.id)
+            : selected.add(payload.id)
+      )
+
     default:
       return state
   }
@@ -70,9 +82,18 @@ export const loadedSelector = createSelector(
   (state) => state.loaded
 )
 export const eventListSelector = createSelector(entitiesSelector, (entities) =>
-  entities.toArray()
+  entities.valueSeq().toArray()
 )
 
+export const selectedIdsSelector = createSelector(stateSelector, (state) =>
+  state.selected.toArray()
+)
+
+export const selectedEventsListSelector = createSelector(
+  selectedIdsSelector,
+  entitiesSelector,
+  (ids, entities) => ids.map((id) => entities.get(id))
+)
 /**
  * Action Creators
  * */
@@ -80,6 +101,13 @@ export const eventListSelector = createSelector(entitiesSelector, (entities) =>
 export function fetchAllEvents() {
   return {
     type: FETCH_ALL_REQUEST
+  }
+}
+
+export function toggleSelect(id) {
+  return {
+    type: TOGGLE_SELECT,
+    payload: { id }
   }
 }
 

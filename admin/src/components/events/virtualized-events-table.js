@@ -5,7 +5,8 @@ import {
   fetchAllEvents,
   eventListSelector,
   loadedSelector,
-  loadingSelector
+  loadingSelector,
+  toggleSelect as handleSelect
 } from '../../ducks/events'
 import Loader from '../common/loader'
 import 'react-virtualized/styles.css'
@@ -28,6 +29,7 @@ export class EventsTable extends Component {
         rowGetter={this.rowGetter}
         rowCount={this.props.events.length}
         overscanRowCount={0}
+        onRowClick={this.handleRowClick}
       >
         <Column dataKey="title" width={200} label="Title" />
         <Column dataKey="when" width={100} label="Date" />
@@ -35,6 +37,8 @@ export class EventsTable extends Component {
       </Table>
     )
   }
+
+  handleRowClick = ({ rowData }) => this.props.handleSelect(rowData.id)
 
   rowGetter = ({ index }) => this.props.events[index]
 }
@@ -45,5 +49,5 @@ export default connect(
     loading: loadingSelector(state),
     loaded: loadedSelector(state)
   }),
-  { fetchAllEvents }
+  { fetchAllEvents, handleSelect }
 )(EventsTable)
