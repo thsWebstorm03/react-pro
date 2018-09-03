@@ -1,4 +1,4 @@
-import { all, takeEvery, put, call } from 'redux-saga/effects'
+import { all, takeEvery, put, select, call } from 'redux-saga/effects'
 import { appName } from '../config'
 import { Record, List } from 'immutable'
 import firebase from 'firebase/app'
@@ -88,6 +88,9 @@ export function fetchAllEvents() {
  * */
 
 export function* fetchAllSaga() {
+  const { loading, loaded } = yield select(stateSelector)
+  if (loading || loaded) return
+
   const ref = firebase.database().ref('events')
 
   yield put({

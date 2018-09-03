@@ -16,7 +16,7 @@ class EventsTable extends Component {
   }
 
   render() {
-    if (this.props.loading) return <Loader />
+    if (this.props.loading && !this.props.loaded) return <Loader />
     return (
       <table>
         <tbody>{this.getRows()}</tbody>
