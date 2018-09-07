@@ -56,6 +56,13 @@ export const stateSelector = (state) => state[moduleName]
 export const peopleSelector = createSelector(stateSelector, (state) =>
   state.entities.valueSeq().toArray()
 )
+export const idSelector = (_, props) => props.id
+
+export const personSelector = createSelector(
+  stateSelector,
+  idSelector,
+  (state, id) => state.getIn(['entities', id])
+)
 
 /**
  * Action Creators

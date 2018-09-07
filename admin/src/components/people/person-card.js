@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
 import { DragSource } from 'react-dnd'
+import { getEmptyImage } from 'react-dnd-html5-backend'
+import PersonDragPreview from './person-drag-preview'
 
 class PersonCard extends Component {
+  componentDidMount() {
+    this.props.connectDragPreview(getEmptyImage())
+  }
+
   render() {
     const { person, connectDragSource, isDragging } = this.props
     const dndStyle = {
@@ -22,13 +28,15 @@ const spec = {
   beginDrag(props) {
     return {
       //            person: props.props
-      id: props.person.id
+      id: props.person.id,
+      DragPreview: PersonDragPreview
     }
   }
 }
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 })
 
