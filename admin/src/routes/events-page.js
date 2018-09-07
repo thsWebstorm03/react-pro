@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import EventsTable from '../components/events/virtualized-lazy-table'
 import SelectedEvents from '../components/events/selected-events'
+import PeopleList from '../components/people/people-list'
 
 class EventsPage extends Component {
   static propTypes = {}
@@ -8,6 +9,7 @@ class EventsPage extends Component {
   render() {
     return (
       <div>
+        <PeopleList />
         <SelectedEvents />
         <EventsTable />
       </div>
